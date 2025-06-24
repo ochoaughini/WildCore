@@ -35,8 +35,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 3. Install development dependencies:
 ```bash
-pip install -r requirements.txt
-pip install pytest flake8
+pip install .[dev]
 ```
 4. Run tests before submitting a PR:
 ```bash
