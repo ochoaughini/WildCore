@@ -1,8 +1,8 @@
 # Agent Module Documentation
 
-The agent module contains the `GutoVectorWildcard` class, which simulates an AI agent capable of taking on different roles and generating embeddings that can be either normal or anomalous.
+The agent module contains the `SecuritySimulationAgent` class, which simulates an AI agent capable of taking on different roles and generating embeddings that can be either normal or anomalous.
 
-## GutoVectorWildcard
+## SecuritySimulationAgent
 
 This class serves as a "red team" agent that can be used to test defenses by simulating both normal behavior and potential security breaches.
 

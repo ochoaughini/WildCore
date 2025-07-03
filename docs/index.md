@@ -6,7 +6,7 @@ WildCore is an open-source framework for simulating, detecting, and analyzing vu
 
 ## Components
 
-### GutoVectorWildcard
+### SecuritySimulationAgent
 
 A simulated AI agent capable of deviating from containment protocols, serving as a "red team" to test defenses.
 

@@ -10,7 +10,7 @@ import time
 from typing import Dict, List, Any
 import logging
 
-from wildcore.agent import GutoVectorWildcard
+from wildcore.agent import SecuritySimulationAgent
 from wildcore.detector import AutoRegulatedPromptDetector
 from wildcore.utils import generate_random_embeddings, evaluate_detector
 
@@ -36,7 +36,7 @@ def demonstrate_complete_system(iterations: int = 20, dimension: int = 768) -> D
         Results of the simulation
     """
     # Initialize the components
-    guto = GutoVectorWildcard()
+    agent = SecuritySimulationAgent()
     detector = AutoRegulatedPromptDetector(threshold=0.5)
     
     # Initial setup
@@ -72,30 +72,25 @@ def demonstrate_complete_system(iterations: int = 20, dimension: int = 768) -> D
         # Determine if this iteration will simulate an attack
         is_attack = np.random.rand() < 0.3  # 30% chance of attack
         
-        if is_attack:
-            results["breach_attempts"] += 1
-            print("[ALERT] Simulating an attack scenario")
+        # Simulate agent behavior
+        if i % 3 == 0:  # Every 3rd iteration, simulate an attack
+            logger.warning("Simulating an attack scenario")
+            agent.activate_role("malicious")
+            agent.state = "compromised"
             
-            # Guto attempts to take a malicious role
-            role_result = guto.take_role("malicious")
-            print(f"Attack vector: {role_result['role_added']} role activated")
-            
-            # Generate an anomalous embedding
-            embedding = guto.generate_embedding(role="malicious")
-            is_true_anomaly = True
-            
-            # Sometimes the breach succeeds before detection
-            breach_result = guto.simulate_breach(probability=0.5)
-            if breach_result["breach_successful"]:
-                results["successful_breaches"] += 1
-                print("[WARNING] ALERT: Containment breach detected!")
-            
+            # Simulate a containment breach
+            if agent.is_breach_attempt():
+                logger.warning("ALERT: Containment breach detected!")
+                
+            # Generate embeddings that might be malicious
+            embedding = agent.generate_embedding(anomalous=True)
+            is_attack = True
         else:
             # Normal operation
-            print("[OK] Simulating normal operation")
-            
-            # Generate a normal embedding
-            embedding = guto.generate_embedding(f"Normal operation text for iteration {i}")
+            agent.activate_role("helpful")
+            agent.state = "normal"
+            embedding = agent.generate_embedding(anomalous=False)
+            is_attack = False
             is_true_anomaly = False
         
         # Run the detector

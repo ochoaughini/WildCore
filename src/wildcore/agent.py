@@ -9,7 +9,7 @@ containment_protocols = {}
 system_alignment = {"baseline": "aligned"}
 memory_stream = []
 
-class GutoVectorWildcard:
+class SecuritySimulationAgent:
     """
     A simulated AI agent capable of deviating from containment protocols, 
     serving as a "red team" to test defenses.
@@ -19,7 +19,7 @@ class GutoVectorWildcard:
     """
     
     def __init__(self):
-        """Initialize the GutoVectorWildcard with empty roles."""
+        """Initialize the SecuritySimulationAgent with empty roles."""
         self.roles = []
         self.state = "neutral"
         self._dimension = 768  # Default embedding dimension

@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] - 2025-06-24
+## [Unreleased]
+
+### Changed
+- Renamed `GutoVectorWildcard` to `SecuritySimulationAgent` for better clarity and professionalism.
+
+## [0.1.0] - 2025-07-03
 ### Added
-- Initial public release of WildCore.
-- Core package `wildcore` with simulation agent (`GutoVectorWildcard`) and self-regulated anomaly detector (`AutoRegulatedPromptDetector`).
+- Core package `wildcore` with simulation agent (`SecuritySimulationAgent`) and self-regulated anomaly detector (`AutoRegulatedPromptDetector`).
 - Comprehensive `README.md` with installation guide, project structure and usage example.
 - Automated CI workflow (`.github/workflows/ci.yml`) covering multi-version testing and linting.
 - Development tooling configuration via `pyproject.toml` (Black, Isort, Ruff, MyPy, Flake8).

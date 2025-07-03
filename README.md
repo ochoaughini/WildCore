@@ -20,7 +20,7 @@ This repository provides tools for security researchers, ML engineers, and devel
 
 ## Key Features
 
-*   **Simulation Agent (`GutoVectorWildcard`):** A simulated AI agent capable of deviating from containment protocols, serving as a "red team" to test defenses.
+*   **Simulation Agent (`SecuritySimulationAgent`):** A simulated AI agent capable of deviating from containment protocols, serving as a "red team" to test defenses.
 *   **Self-Regulated Detector (`AutoRegulatedPromptDetector`):** A multi-layered defense system that combines multiple detection techniques and adjusts its own parameters in real-time.
 *   **Ensemble Detection:** Utilizes a voting system among different methods (cosine similarity, anomaly scoring, unsupervised learning) to increase accuracy and reduce false positives.
 *   **Realistic Simulation:** Includes scripts to generate embedding datasets that simulate normal, suspicious, and malicious behavior.
@@ -51,10 +51,10 @@ pip install .
 **3. Verify the installation:**
 ```python
 import wildcore
-from wildcore.agent import GutoVectorWildcard
+from wildcore.agent import SecuritySimulationAgent
 from wildcore.detector import AutoRegulatedPromptDetector
 
-agent = GutoVectorWildcard()
+agent = SecuritySimulationAgent()
 embedding = agent.generate_embedding("Hello")
 detector = AutoRegulatedPromptDetector()
 print(detector.ensemble_detection(embedding, [embedding]))
@@ -70,7 +70,7 @@ The project is organized modularly to facilitate maintenance and contributions:
 WildCore/
 ├── src/
 │   └── wildcore/          # Package source
-│       ├── agent.py       # Defines GutoVectorWildcard
+│       ├── agent.py       # Defines SecuritySimulationAgent
 │       └── detector.py    # Defines AutoRegulatedPromptDetector
 ├── tests/             # Unit tests
 ├── main.py            # Entry point for the demonstration
