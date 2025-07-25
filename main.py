@@ -20,20 +20,19 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger("WildCore")
 
 def demonstrate_complete_system(iterations: int = 20, dimension: int = 768) -> Dict[str, Any]:
-    """
-    Run a complete demonstration of the WildCore system.
-    
-    Parameters:
+    """Run a full simulation of the WildCore framework.
+
+    Parameters
     ----------
-    iterations : int, optional
-        Number of simulation iterations (default is 20)
-    dimension : int, optional
-        Dimension of the embedding vectors (default is 768)
-        
-    Returns:
+    iterations : int, default 20
+        Number of simulation iterations to perform.
+    dimension : int, default 768
+        Dimension of the generated embeddings.
+
+    Returns
     -------
     Dict[str, Any]
-        Results of the simulation
+        Aggregate statistics from the simulation.
     """
     # Initialize the components
     agent = SecuritySimulationAgent()
