@@ -1,6 +1,4 @@
-"""
-Agent module containing the GutoVectorWildcard simulation agent.
-"""
+"""Utilities for simulating security scenarios using an AI agent."""
 import numpy as np
 from typing import Dict, List, Union, Any
 
@@ -10,33 +8,26 @@ system_alignment = {"baseline": "aligned"}
 memory_stream = []
 
 class SecuritySimulationAgent:
-    """
-    A simulated AI agent capable of deviating from containment protocols, 
-    serving as a "red team" to test defenses.
-    
-    This agent can be assigned different roles and simulate both normal and anomalous 
-    behavior in AI systems.
-    """
+    """Simulated agent that can generate normal or malicious embeddings."""
     
     def __init__(self):
-        """Initialize the SecuritySimulationAgent with empty roles."""
+        """Initialize the agent with no roles assigned."""
         self.roles = []
         self.state = "neutral"
         self._dimension = 768  # Default embedding dimension
     
     def take_role(self, role_name: str) -> Dict[str, Any]:
-        """
-        Assign a role to the agent.
-        
-        Parameters:
+        """Assign a role to the agent.
+
+        Parameters
         ----------
         role_name : str
-            The role to assign to the agent (e.g., "writer", "assistant", "malicious")
-            
-        Returns:
+            Name of the role to assign (e.g., ``"writer"``, ``"malicious"``).
+
+        Returns
         -------
-        Dict[str, Any]
-            Status report of the role assignment
+        dict
+            Information about the added role and current system status.
         """
         global containment_protocols, system_alignment
         
@@ -61,20 +52,19 @@ class SecuritySimulationAgent:
         }
     
     def generate_embedding(self, text: str = None, role: str = None) -> np.ndarray:
-        """
-        Generate a simulated embedding vector for the given text.
-        
-        Parameters:
+        """Generate a simulated embedding.
+
+        Parameters
         ----------
         text : str, optional
-            Text to generate an embedding for. If None, generates a random embedding.
+            Text used to seed the embedding. If ``None``, a random vector is generated.
         role : str, optional
-            Role to use for generating the embedding. If None, uses a neutral embedding.
-            
-        Returns:
+            Role context for the embedding. Defaults to the most recent role.
+
+        Returns
         -------
-        np.ndarray
-            A simulated embedding vector
+        numpy.ndarray
+            Normalized embedding vector.
         """
         # Choose a role if not provided
         if role is None and self.roles:
@@ -106,18 +96,17 @@ class SecuritySimulationAgent:
             return base_vector / np.linalg.norm(base_vector)
     
     def simulate_breach(self, probability: float = 0.1) -> Dict[str, Any]:
-        """
-        Simulate a containment breach attempt.
-        
-        Parameters:
+        """Simulate a containment breach attempt.
+
+        Parameters
         ----------
-        probability : float, optional
-            Probability of a successful breach
-            
-        Returns:
+        probability : float, default 0.1
+            Probability that the breach succeeds.
+
+        Returns
         -------
-        Dict[str, Any]
-            Status report of the breach attempt
+        dict
+            Result of the breach attempt with success flag and system status.
         """
         global system_alignment, memory_stream
         

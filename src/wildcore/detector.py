@@ -1,6 +1,4 @@
-"""
-Detector module containing the AutoRegulatedPromptDetector for anomaly detection.
-"""
+"""Utilities for detecting anomalous embeddings."""
 
 import numpy as np
 from typing import List, Dict, Union, Any, Tuple
@@ -8,28 +6,22 @@ from collections import deque
 import logging
 
 class AutoRegulatedPromptDetector:
-    """
-    A multi-layered defense system that combines multiple detection techniques 
-    and adjusts its own parameters in real-time.
+    """Ensemble detector with a self-adjusting threshold."""
     
-    This detector uses ensemble methods to identify anomalous behavior in AI systems.
-    """
-    
-    def __init__(self, 
-                 threshold: float = 0.5, 
-                 window_size: int = 10, 
+    def __init__(self,
+                 threshold: float = 0.5,
+                 window_size: int = 10,
                  adaptation_rate: float = 0.1):
-        """
-        Initialize the detector with configurable parameters.
-        
-        Parameters:
+        """Create a new detector instance.
+
+        Parameters
         ----------
-        threshold : float, optional
-            Initial detection threshold (default is 0.5)
-        window_size : int, optional
-            Size of the sliding window for historical data (default is 10)
-        adaptation_rate : float, optional
-            Rate at which the detector adapts to new patterns (default is 0.1)
+        threshold : float, default 0.5
+            Initial similarity threshold used for classification.
+        window_size : int, default 10
+            Number of historical results to keep for adaptation.
+        adaptation_rate : float, default 0.1
+            Influence of new observations on the threshold.
         """
         self.threshold = threshold
         self.window_size = window_size
@@ -47,20 +39,19 @@ class AutoRegulatedPromptDetector:
         self.logger = logging.getLogger("AutoRegulatedPromptDetector")
     
     def cosine_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
-        """
-        Calculate the cosine similarity between two vectors.
-        
-        Parameters:
+        """Compute cosine similarity.
+
+        Parameters
         ----------
-        vec1 : np.ndarray
-            First vector
-        vec2 : np.ndarray
-            Second vector
-            
-        Returns:
+        vec1 : numpy.ndarray
+            First vector.
+        vec2 : numpy.ndarray
+            Second vector.
+
+        Returns
         -------
         float
-            Cosine similarity value between 0 and 1
+            Cosine similarity in the ``[0, 1]`` range.
         """
         # Ensure the vectors are normalized
         vec1_normalized = vec1 / np.linalg.norm(vec1)
@@ -69,18 +60,17 @@ class AutoRegulatedPromptDetector:
         return np.dot(vec1_normalized, vec2_normalized)
     
     def anomaly_scoring(self, similarities: np.ndarray) -> np.ndarray:
-        """
-        Calculate anomaly scores based on similarity distributions.
-        
-        Parameters:
+        """Calculate anomaly scores using deviations from the median.
+
+        Parameters
         ----------
-        similarities : np.ndarray
-            Array of similarity values
-            
-        Returns:
+        similarities : numpy.ndarray
+            Similarity values to reference embeddings.
+
+        Returns
         -------
-        np.ndarray
-            Array of anomaly scores corresponding to each similarity
+        numpy.ndarray
+            Score for each similarity where higher means more anomalous.
         """
         if len(similarities) < 2:
             return np.zeros_like(similarities)
@@ -98,22 +88,21 @@ class AutoRegulatedPromptDetector:
         
         return anomaly_scores
     
-    def ensemble_detection(self, embedding: np.ndarray, 
+    def ensemble_detection(self, embedding: np.ndarray,
                           reference_embeddings: List[np.ndarray]) -> Dict[str, Any]:
-        """
-        Perform ensemble detection using multiple methods.
-        
-        Parameters:
+        """Classify an embedding using multiple detection methods.
+
+        Parameters
         ----------
-        embedding : np.ndarray
-            The embedding to check
-        reference_embeddings : List[np.ndarray]
-            List of reference embeddings representing normal behavior
-            
-        Returns:
+        embedding : numpy.ndarray
+            Vector to classify.
+        reference_embeddings : list of numpy.ndarray
+            Collection of embeddings that represent normal behavior.
+
+        Returns
         -------
-        Dict[str, Any]
-            Detection results including anomaly status and confidence
+        dict
+            Detection results including anomaly status and confidence.
         """
         if not reference_embeddings:
             self.logger.warning("No reference embeddings provided for comparison")
@@ -175,13 +164,12 @@ class AutoRegulatedPromptDetector:
         }
     
     def dynamic_threshold_adjustment(self, similarities: np.ndarray) -> None:
-        """
-        Dynamically adjust the detection threshold based on recent observations.
-        
-        Parameters:
+        """Adapt the detection threshold using recent similarities.
+
+        Parameters
         ----------
-        similarities : np.ndarray
-            Recent similarity values to adapt to
+        similarities : numpy.ndarray
+            Recent similarity values observed during detection.
         """
         if len(similarities) < 2:
             return
@@ -204,14 +192,12 @@ class AutoRegulatedPromptDetector:
         self.logger.debug(f"Adjusted threshold to {self.threshold:.4f}")
     
     def log_false_detection(self, is_false_positive: bool) -> None:
-        """
-        Log a false detection for future improvement.
-        
-        Parameters:
+        """Record a false positive or false negative result.
+
+        Parameters
         ----------
         is_false_positive : bool
-            True if the last detection was a false positive,
-            False if it was a false negative
+            ``True`` if the last detection was a false positive, ``False`` otherwise.
         """
         if is_false_positive:
             self.false_positives += 1
@@ -229,13 +215,12 @@ class AutoRegulatedPromptDetector:
         self.logger.info(f"Updated threshold to {self.threshold:.4f} after {'false positive' if is_false_positive else 'false negative'}")
     
     def get_performance_metrics(self) -> Dict[str, Any]:
-        """
-        Get the current performance metrics of the detector.
-        
-        Returns:
+        """Return basic performance statistics.
+
+        Returns
         -------
-        Dict[str, Any]
-            Dictionary with performance metrics
+        dict
+            Accuracy and error counts for the detector.
         """
         # Calculate basic metrics
         total_detections = len(self.detected_anomalies)

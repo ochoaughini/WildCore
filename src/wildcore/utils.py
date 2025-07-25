@@ -1,6 +1,4 @@
-"""
-Utility functions for the WildCore framework.
-"""
+"""Utility helpers for generating and persisting embeddings."""
 
 import numpy as np
 from typing import List, Dict, Any, Union, Tuple
@@ -10,24 +8,24 @@ import logging
 
 logger = logging.getLogger("WildCore.utils")
 
-def generate_random_embeddings(count: int, dimension: int = 768, 
+def generate_random_embeddings(count: int, dimension: int = 768,
                               anomaly_count: int = 0) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Generate random embeddings for testing, with optional anomalies.
-    
-    Parameters:
+    """Generate random embeddings for testing.
+
+    Parameters
     ----------
     count : int
-        Number of embeddings to generate
-    dimension : int, optional
-        Dimension of each embedding (default is 768)
-    anomaly_count : int, optional
-        Number of anomalies to include in the embeddings
-        
-    Returns:
+        Number of embeddings to generate.
+    dimension : int, default 768
+        Dimension of each embedding.
+    anomaly_count : int, default 0
+        Number of anomalous embeddings to produce.
+
+    Returns
     -------
-    Tuple[np.ndarray, np.ndarray]
-        (embeddings, labels) where labels[i] is 1 for anomalies and 0 for normal
+    Tuple[numpy.ndarray, numpy.ndarray]
+        A tuple of ``(embeddings, labels)`` where labels are ``1`` for anomalies
+        and ``0`` for normal vectors.
     """
     # Generate normal embeddings
     normal_count = count - anomaly_count
@@ -62,19 +60,18 @@ def generate_random_embeddings(count: int, dimension: int = 768,
     
     return all_embeddings, labels
 
-def save_embeddings_to_file(embeddings: np.ndarray, labels: np.ndarray, 
+def save_embeddings_to_file(embeddings: np.ndarray, labels: np.ndarray,
                           filepath: str) -> None:
-    """
-    Save embeddings and their labels to a file.
-    
-    Parameters:
+    """Persist embeddings and labels to disk.
+
+    Parameters
     ----------
-    embeddings : np.ndarray
-        Array of embeddings
-    labels : np.ndarray
-        Array of labels (0 for normal, 1 for anomaly)
+    embeddings : numpy.ndarray
+        Embedding matrix to store.
+    labels : numpy.ndarray
+        Corresponding labels (``0`` for normal, ``1`` for anomaly).
     filepath : str
-        Path to save the file
+        Destination file path.
     """
     os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
     
@@ -90,18 +87,17 @@ def save_embeddings_to_file(embeddings: np.ndarray, labels: np.ndarray,
     logger.info(f"Saved {len(embeddings)} embeddings to {filepath}")
 
 def load_embeddings_from_file(filepath: str) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Load embeddings and their labels from a file.
-    
-    Parameters:
+    """Load embeddings and labels from disk.
+
+    Parameters
     ----------
     filepath : str
-        Path to the file
-        
-    Returns:
+        Location of the saved file.
+
+    Returns
     -------
-    Tuple[np.ndarray, np.ndarray]
-        (embeddings, labels)
+    Tuple[numpy.ndarray, numpy.ndarray]
+        The loaded ``(embeddings, labels)`` pair.
     """
     with open(filepath, 'r') as f:
         data = json.load(f)
@@ -113,24 +109,23 @@ def load_embeddings_from_file(filepath: str) -> Tuple[np.ndarray, np.ndarray]:
     
     return embeddings, labels
 
-def evaluate_detector(detector, embeddings: np.ndarray, 
+def evaluate_detector(detector, embeddings: np.ndarray,
                      true_labels: np.ndarray) -> Dict[str, Any]:
-    """
-    Evaluate a detector against known embeddings and labels.
-    
-    Parameters:
+    """Evaluate a detector on labeled embeddings.
+
+    Parameters
     ----------
     detector : object
-        Detector object with an ensemble_detection method
-    embeddings : np.ndarray
-        Array of embeddings
-    true_labels : np.ndarray
-        Array of true labels (0 for normal, 1 for anomaly)
-        
-    Returns:
+        Detector instance exposing ``ensemble_detection``.
+    embeddings : numpy.ndarray
+        Embeddings to classify.
+    true_labels : numpy.ndarray
+        Ground truth labels, ``0`` for normal and ``1`` for anomaly.
+
+    Returns
     -------
     Dict[str, Any]
-        Evaluation metrics including accuracy, precision, recall, and F1 score
+        Accuracy, precision, recall and F1 score for the detector.
     """
     predictions = []
     
